@@ -19,8 +19,7 @@ FSJS project 2 - List Filter and Pagination
 // document.addEventListener('DOMContentLoaded', () => {
    const studentItem = document.getElementsByClassName('student-item cf');
    const itemsPerPage = 10;
-   const totalPages = studentItem.length/itemsPerPage;
-
+   const totalPages = Math.ceil(studentItem.length/itemsPerPage);
 
 /*** 
    Create the `showPage` function to hide all of the items in the 
@@ -28,9 +27,8 @@ FSJS project 2 - List Filter and Pagination
    const showPage = (list, page) => {
       let startIndex = (page * itemsPerPage) - itemsPerPage;
       let endIndex = page * itemsPerPage;
-
       for ( let i = 0; i < list.length; i++ ) {
-         if ( i >= startIndex && i <= endIndex ) {
+         if ( i >= startIndex && i < endIndex ) {
             list[i].style.display = 'block';
          } else {
             list[i].style.display = 'none';
@@ -62,18 +60,20 @@ const appendPageLinks = (list) => {
      li = document.createElement('li');
      a = document.createElement('a');
      a.setAttribute("href", "#");
-     li.appendChild(a);
      a.innerHTML = i + 1;
+     ul.appendChild(li);
+     li.appendChild(a);
    }
-   li.firstElementChild.className = "active";
+   const myLinks = document.querySelectorAll('.pagination a');
+   myLinks[0].className = "active";
    for (let i = 0; i < totalPages; i++) {
       a.addEventListener('click', (event) => {
          for (let i = 0; i < totalPages; i++) {
-            a[i].classList.remove('active');
+            myLinks[i].classList.remove('active');            
          }
          let eventTarget = event.target;
          eventTarget.classList.add('active');
-         showPage(studentItem, a.innerHTML);
+         showPage(list, eventTarget.innerHTML);
       });
    }
 }
